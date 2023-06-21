@@ -2,13 +2,13 @@ from queue import PriorityQueue
 from math import sqrt
 import random
 
-# создание списка на основе "maze-for-u.txt" файла с лабиринтом
+# Read the maze from the "maze-for-u.txt" file and create a maze list
 def read_maze(filename):
     with open(filename) as f:
         maze = [[char for char in line.strip()] for line in f]
     return maze
 
-# создание ключа  в рандомном месте
+# Create a random key position within the passages
 maze = read_maze("maze-for-u.txt")
 height = len(maze)
 width = len(maze[0])
@@ -19,7 +19,7 @@ for i in range(height):
             passages.append((i, j))
 random_key = random.choice(passages)
 
-# функция, возвращающая список валидных соседей
+# Function to get valid neighbors
 def get_neighbors(maze, cell):
     row, col = cell
     neighbors = [(row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1)]
@@ -30,11 +30,11 @@ def get_neighbors(maze, cell):
             valid_neighbors.append(neighbor)
     return valid_neighbors
 
-# эвристическое расстояние от ячейки до ключа или конечной точки
+# Heuristic function to estimate the distance from a cell to the key or end point
 def get_heuristic(cell, end):
     return sqrt((cell[0] - end[0]) ** 2 + (cell[1] - end[1]) ** 2)
 
-# Жадный алгоритм
+# Greedy Algorithm
 def find_path_greedy(maze):
     start = (0, 1)
     key = random_key
@@ -53,7 +53,7 @@ def find_path_greedy(maze):
                 stack.append((neighbor, path + [neighbor]))
     return None
 
-# алгоритм А*
+# A* Algorithm
 def find_path_a_star(maze):
     key = random_key
     end = (len(maze) - 1, len(maze[0]) - 2)
@@ -72,7 +72,7 @@ def find_path_a_star(maze):
                 queue.put((priority, neighbor, new_path))
     return None
 
-# создание файла "resuult.txt" 
+# Create the "resuult.txt" file
 def main():
     filename = "maze-for-u.txt"
     maze = read_maze(filename)
